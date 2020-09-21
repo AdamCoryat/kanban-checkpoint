@@ -1,11 +1,15 @@
 import mongoose from "mongoose";
-import ValueSchema from "../models/Value";
 import ProfileSchema from "../models/Profile";
-import BoardSchema from '../models/Board'
+import BoardSchema from "../models/Board";
+import ListSchema from "../models/List";
+import TaskSchema from "../models/Task";
+import CommentSchema from "../models/Comment";
 class DbContext {
-  Values = mongoose.model("Value", ValueSchema);
+  Comments = mongoose.model("Comment", CommentSchema);
+  Tasks = mongoose.model("Task", TaskSchema);
+  Lists = mongoose.model("List", ListSchema);
+  Boards = mongoose.model("Board", BoardSchema);
   Profile = mongoose.model("Profile", ProfileSchema);
-  Boards = mongoose.model("Board", BoardSchema)
 }
 
 export const dbContext = new DbContext();

@@ -13,18 +13,19 @@ export default {
   async beforeCreate() {
     try {
       await onAuth();
-      this.$store.dispatch("setBearer", this.$auth.bearer);
-      this.$store.dispatch("getProfile");
+      if (this.$auth.isAuthenticated) {
+        this.$store.dispatch("setBearer", this.$auth.bearer);
+        this.$store.dispatch("getProfile");
+      }
     } catch (err) {
       this.$router.push({ name: "home" });
     }
   },
   components: {
-    Navbar
-  }
+    Navbar,
+  },
 };
 </script>
-
 
 <style lang="scss">
 @import "./assets/_variables.scss";
