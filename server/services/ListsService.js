@@ -9,8 +9,12 @@ class ListsService {
     );
   }
 
+  // async findListByBoardId(query = {}){
+  //   let data = await dbContext.Lists.find(query)
+    
+  // }
   async getById(id, creatorEmail) {
-    let data = await dbContext.Lists.findOne({ _id: id, creatorEmail });
+    let data = await (await dbContext.Lists.findOne({ _id: id, creatorEmail })).populate("boards");
     if (!data) {
       throw new BadRequest("Invalid ID or you do not own this board");
     }
