@@ -14,7 +14,7 @@ class ListsService {
     
   // }
   async getById(id, creatorEmail) {
-    let data = await (await dbContext.Lists.findOne({ _id: id, creatorEmail })).populate("boards");
+    let data = await (await dbContext.Lists.findOne({ _id: id.board, creatorEmail }));
     if (!data) {
       throw new BadRequest("Invalid ID or you do not own this board");
     }
