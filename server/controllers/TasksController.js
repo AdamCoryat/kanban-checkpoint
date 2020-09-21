@@ -7,7 +7,7 @@ import { commentsService } from "../services/commentsService";
 
 
 //PUBLIC
-export class TaskController extends BaseController {
+export class TasksController extends BaseController {
   constructor() {
     super("api/tasks")
     this.router

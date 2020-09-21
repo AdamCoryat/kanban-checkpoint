@@ -47,7 +47,7 @@ export class BoardsController extends BaseController {
 
   async getListsByBoardId(req, res, next) {
     try {
-      let data = await listsService.getById({board: req.params.id}, req.userinfo.email)
+      let data = await listsService.getById({board: req.params.id}, req.userInfo.email)
       return res.send(data)
     } catch (error) {
       next(error);
