@@ -1,18 +1,22 @@
 <template>
-  <div class="board">
+  <div class="board container-fluid">
     <h1 v-if="board.title">{{ board.title }}</h1>
-    <h1 v-else>Loading...</h1>
+    <div class="row p-2">
+    <list-component v-for="list in lists" :key="list.id" :listProp="list" />
+    </div>
   </div>
 </template>
 
 <script>
+import ListComponent from "../components/ListComponent.vue"
 export default {
   name: "board",
+  props: ["boardId"],
   data() {
     return {
-      list: {
-        id: this.list.id,
-      },
+      // list: {
+      //   id: this.list.id,
+      // },
     };
   },
 
@@ -25,10 +29,6 @@ export default {
       path: "boards/" + this.$route.params.boardId + "/lists",
       resource: "lists",
     });
-    this.$store.dispatch("getResource", {
-      path: "lists/" + this.list._id + "/tasks",
-      resource: "lists",
-    });
   },
 
   computed: {
@@ -36,10 +36,12 @@ export default {
       //FIXME This does not work on page reload because the activeBoard is empty in the store
       return this.$store.state.activeBoard;
     },
-    list() {
+    lists() {
       return this.$store.state.lists;
     },
   },
-  props: ["boardId"],
+  components: {
+  ListComponent
+  },
 };
 </script>

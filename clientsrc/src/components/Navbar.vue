@@ -24,9 +24,9 @@
         <li
           class="nav-item"
           v-if="$auth.isAuthenticated"
-          :class="{ active: $route.name == 'boards' }"
+          :class="{ active: $route.name == 'dashboard' }"
         >
-          <router-link class="nav-link" :to="{ name: 'boards' }"
+          <router-link class="nav-link" :to="{ name: 'dashboard' }"
             >My-Dashboard</router-link
           >
         </li>

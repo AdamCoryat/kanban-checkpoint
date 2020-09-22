@@ -1,5 +1,5 @@
 <template>
-  <div class="boards">
+  <div class="dashboards">
     WELCOME TO THE BOARDS!!!
     <form @submit.prevent="addBoard">
       <input
@@ -25,7 +25,7 @@
 
 <script>
 export default {
-  name: "boards",
+  name: "dashboards",
   mounted() {
     this.$store.dispatch("getResource", {
       path: "boards",
