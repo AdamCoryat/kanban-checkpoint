@@ -1,33 +1,37 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Home from '../views/Home.vue'
-import Boards from '../views/Boards.vue'
-import Board from '../views/Board.vue'
-import { authGuard } from "@bcwdev/auth0-vue"
+import Vue from "vue";
+import Router from "vue-router";
+// @ts-ignore
+import Home from "../pages/Home.vue";
+// @ts-ignore
+import Boards from "../pages/Boards.vue";
+// @ts-ignore
+import Board from "../pages/Board.vue";
+// @ts-ignore
+import { authGuard } from "@bcwdev/auth0-vue";
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'home',
-      component: Home
+      path: "/",
+      name: "home",
+      component: Home,
     },
     {
-      path: '/boards',
-      name: 'boards',
+      path: "/boards",
+      name: "boards",
       component: Boards,
-      beforeEnter: authGuard
+      beforeEnter: authGuard,
     },
     {
-      path: '/boards/:boardId',
-      name: 'board',
-      component: Board
+      path: "/boards/:boardId",
+      name: "board",
+      component: Board,
     },
     {
       path: "*",
-      redirect: '/'
-    }
-  ]
-})
+      redirect: "/",
+    },
+  ],
+});

@@ -26,7 +26,12 @@
 <script>
 export default {
   name: "boards",
-  mounted() {},
+  mounted() {
+    this.$store.dispatch("getResource", {
+      path: "boards",
+      resource: "boards",
+    });
+  },
   data() {
     return {
       newBoard: {
