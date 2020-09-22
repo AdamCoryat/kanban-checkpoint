@@ -6,6 +6,7 @@ const Task = new Schema(
   {
     title: { type: String, required: true },
     creatorEmail: { type: String, required: true },
+    completed: { type: Boolean, default: false },
     listId: { type: ObjectId, ref: "List", required: true },
   },
   { timestamps: true, toJSON: { virtuals: true } }
