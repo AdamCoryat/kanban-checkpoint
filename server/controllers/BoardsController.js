@@ -1,54 +1,57 @@
-import express from 'express'
+import express from "express";
 import BaseController from "../utils/BaseController";
 import auth0provider from "@bcwdev/auth0provider";
-import { boardsService } from '../services/BoardsService'
+import { boardsService } from "../services/BoardsService";
 import { listsService } from "../services/ListsService";
-
-
 
 //PUBLIC
 export class BoardsController extends BaseController {
   constructor() {
-    super("api/boards")
+    super("api/boards");
     this.router
       .use(auth0provider.getAuthorizedUserInfo)
-      .get('', this.getAll)
-      .get('/:id', this.getById)
-      .get('/:id/lists', this.getListsByBoardId)
-      .post('', this.create)
-      .put('/:id', this.edit)
-      .delete('/:id', this.delete)
+      .get("", this.getAll)
+      .get("/:id", this.getById)
+      .get("/:id/lists", this.getListsByBoardId)
+      .post("", this.create)
+      .put("/:id", this.edit)
+      .delete("/:id", this.delete);
   }
-
 
   async getAll(req, res, next) {
     try {
       //only gets boards by user who is logged in
-      let data = await boardsService.getAll(req.userInfo.email)
-      return res.send(data)
+      let data = await boardsService.getAll(req.userInfo.email);
+      return res.send(data);
+    } catch (err) {
+      next(err);
     }
-    catch (err) { next(err) }
   }
 
   async getById(req, res, next) {
     try {
-      let data = await boardsService.getById(req.params.id, req.userInfo.email)
-      return res.send(data)
-    } catch (error) { next(error) }
+      let data = await boardsService.getById(req.params.id, req.userInfo.email);
+      return res.send(data);
+    } catch (error) {
+      next(error);
+    }
   }
 
   async create(req, res, next) {
     try {
-      req.body.creatorEmail = req.userInfo.email
-      let data = await boardsService.create(req.body)
-      return res.status(201).send(data)
-    } catch (error) { next(error) }
+      req.body.creatorEmail = req.userInfo.email;
+      let data = await boardsService.create(req.body);
+      return res.status(201).send(data);
+    } catch (error) {
+      next(error);
+    }
   }
 
   async getListsByBoardId(req, res, next) {
     try {
-      let data = await listsService.getById({board: req.params.id}, req.userInfo.email)
-      return res.send(data)
+      let id = req.params.id;
+      let data = await listsService.getListsByBoardId({ boardId: id });
+      return res.send(data);
     } catch (error) {
       next(error);
     }
@@ -56,17 +59,23 @@ export class BoardsController extends BaseController {
 
   async edit(req, res, next) {
     try {
-      let data = await boardsService.edit(req.params.id, req.userInfo.email, req.body)
-      return res.send(data)
-    } catch (error) { next(error) }
+      let data = await boardsService.edit(
+        req.params.id,
+        req.userInfo.email,
+        req.body
+      );
+      return res.send(data);
+    } catch (error) {
+      next(error);
+    }
   }
 
   async delete(req, res, next) {
     try {
-      await boardsService.delete(req.params.id, req.userInfo.email)
-      return res.send("Successfully deleted")
-    } catch (error) { next(error) }
+      await boardsService.delete(req.params.id, req.userInfo.email);
+      return res.send("Successfully deleted");
+    } catch (error) {
+      next(error);
+    }
   }
 }
-
-

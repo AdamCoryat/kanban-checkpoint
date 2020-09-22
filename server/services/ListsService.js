@@ -3,18 +3,21 @@ import { BadRequest } from "../utils/Errors";
 
 class ListsService {
   async getAll(creatorEmail) {
-    return await dbContext.Lists.find({ creatorEmail }).populate(
+    return await dbContext.List.find({ creatorEmail }).populate(
       "creator",
       "name picture"
     );
   }
 
-  // async findListByBoardId(query = {}){
-  //   let data = await dbContext.Lists.find(query)
-    
-  // }
+  async getListsByBoardId(boardId) {
+    let data = await dbContext.List.find(boardId);
+    if (!data) {
+      throw new BadRequest("Invalid Id or you do not own this board");
+    }
+    return data;
+  }
   async getById(id, creatorEmail) {
-    let data = await (await dbContext.Lists.findOne({ _id: id.board, creatorEmail }));
+    let data = await await dbContext.List.findOne({ _id: id, creatorEmail });
     if (!data) {
       throw new BadRequest("Invalid ID or you do not own this board");
     }
@@ -22,12 +25,12 @@ class ListsService {
   }
 
   async create(rawData) {
-    let data = await dbContext.Lists.create(rawData);
+    let data = await dbContext.List.create(rawData);
     return data;
   }
 
   async edit(id, creatorEmail, update) {
-    let data = await dbContext.Lists.findOneAndUpdate(
+    let data = await dbContext.List.findOneAndUpdate(
       { _id: id, creatorEmail },
       update,
       { new: true }
@@ -39,7 +42,7 @@ class ListsService {
   }
 
   async delete(id, creatorEmail) {
-    let data = await dbContext.Lists.findOneAndRemove({
+    let data = await dbContext.List.findOneAndRemove({
       _id: id,
       creatorEmail,
     });
