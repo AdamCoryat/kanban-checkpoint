@@ -38,7 +38,7 @@ export default {
     this.$store.dispatch("getTasks", {
       path: "lists/" + this.listProp.id + "/tasks",
       resource: "tasks",
-      listId: this.listProp.id,
+      parentId: this.listProp.id,
     });
   },
   computed: {

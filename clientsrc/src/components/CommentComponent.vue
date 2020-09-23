@@ -42,10 +42,12 @@ export default {
       this.editToggle = false;
     },
     deleteComment() {
-      this.$store.dispatch("deleteById", {
-        path: "comments/" + this.commentProp.id,
+      this.$store.dispatch("deleteDictionary", {
+        deletePath: "comments/" + this.commentProp.id,
+        path: "tasks/" + this.commentProp.taskId + "/comments",
         resource: "comments",
         id: this.commentProp.id,
+        parentId: this.commentProp.taskId
       });
     },
   },

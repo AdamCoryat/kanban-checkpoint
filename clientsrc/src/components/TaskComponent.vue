@@ -1,6 +1,7 @@
 <template>
   <div class="task-component card">
     <button @click="editToggle = !editToggle">Edit</button>
+    <button @click="deleteTask">Delete Task</button>
     <form @submit.prevent="editTask" class="md-form" v-if="editToggle">
       <input
         v-model="taskEdit.title"
@@ -38,7 +39,7 @@ export default {
     this.$store.dispatch("getComments", {
       path: "tasks/" + this.taskProp.id + "/comments",
       resource: "comments",
-      taskId: this.taskProp.id,
+      parentId: this.taskProp.id,
     });
   },
   computed: {
@@ -57,6 +58,15 @@ export default {
       this.taskEdit = {};
       this.editToggle = false;
     },
+    deleteTask(){
+      this.$store.dispatch("deleteDictionary", {
+        deletePath: "tasks/" + this.taskProp.id,
+        path: "lists/" + this.taskProp.listId + "/tasks",
+        resource: "tasks",
+        id: this.taskProp.id,
+        parentId: this.taskProp.listId
+      })
+    }
   },
   components: {
     CommentComponent,
