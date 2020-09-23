@@ -1,6 +1,6 @@
 <template>
   <div class="board-component col-3">
-    <router-link :to="{ name: 'board', params: { boardId: boardProp.id } }">
+    <router-link :to="{ name: 'board', params: { id: boardProp.id } }">
       <div class="card m-2">
         <h1>{{ boardProp.title }}</h1>
       </div>

@@ -9,13 +9,12 @@
               type="text"
               id="materialSaveFormName"
               class="form-control"
-              placeholder="Task title..."
+              placeholder="List title..."
             />
           </form>
         </div>
       </div>
     </div>
-    <h1 v-if="board.title">{{ board.title }}</h1>
     <div class="row p-2">
       <list-component v-for="list in lists" :key="list.id" :listProp="list" />
     </div>
@@ -30,6 +29,7 @@ export default {
   data() {
     return {
       newList: {
+        title: "",
         boardId: this.id,
       },
     };
@@ -37,7 +37,7 @@ export default {
 
   mounted() {
     this.$store.dispatch("getResource", {
-      path: "boards",
+      path: "boards/" + this.$route.params.id,
       resource: "activeBoard",
     });
     this.$store.dispatch("getResource", {
@@ -56,7 +56,6 @@ export default {
   },
   computed: {
     board() {
-      //FIXME This does not work on page reload because the activeBoard is empty in the store
       return this.$store.state.activeBoard;
     },
     lists() {
