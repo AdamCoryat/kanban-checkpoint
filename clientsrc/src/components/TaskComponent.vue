@@ -36,7 +36,7 @@ export default {
     };
   },
   mounted() {
-    this.$store.dispatch("getComments", {
+    this.$store.dispatch("getDictionaries", {
       path: "tasks/" + this.taskProp.id + "/comments",
       resource: "comments",
       parentId: this.taskProp.id,
@@ -58,15 +58,15 @@ export default {
       this.taskEdit = {};
       this.editToggle = false;
     },
-    deleteTask(){
+    deleteTask() {
       this.$store.dispatch("deleteDictionary", {
         deletePath: "tasks/" + this.taskProp.id,
         path: "lists/" + this.taskProp.listId + "/tasks",
         resource: "tasks",
         id: this.taskProp.id,
-        parentId: this.taskProp.listId
-      })
-    }
+        parentId: this.taskProp.listId,
+      });
+    },
   },
   components: {
     CommentComponent,

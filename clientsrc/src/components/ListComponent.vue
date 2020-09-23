@@ -2,6 +2,7 @@
   <div class="list-component col-3">
     <div class="card">
       <div class="card-header">
+        <button @click="deleteList">Delete</button>
         <button @click="editToggle = !editToggle">Edit</button>
         <form @submit.prevent="editList" class="md-form" v-if="editToggle">
           <input
@@ -35,7 +36,7 @@ export default {
     };
   },
   mounted() {
-    this.$store.dispatch("getTasks", {
+    this.$store.dispatch("getDictionaries", {
       path: "lists/" + this.listProp.id + "/tasks",
       resource: "tasks",
       parentId: this.listProp.id,
@@ -55,6 +56,14 @@ export default {
       });
       this.listEdit = {};
       this.editToggle = false;
+    },
+    deleteList() {
+      this.$store.dispatch("deleteById", {
+        deletePath: "lists/" + this.listProp.id,
+        id: this.listProp.id,
+        resource: "lists",
+        path: "lists/",
+      });
     },
   },
   components: {
