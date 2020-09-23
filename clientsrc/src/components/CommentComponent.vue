@@ -32,11 +32,12 @@ export default {
   computed: {},
   methods: {
     editComment() {
-      this.$store.dispatch("editComment", {
+      this.$store.dispatch("editDictionaries", {
+        getPath: "tasks/" + this.commentProp.taskId + "/comments",
         path: "comments/" + this.commentProp.id,
         resource: "comments",
-        id: this.commentProp.taskId,
         data: this.commentEdit,
+        parentId: this.commentProp.taskId,
       });
       this.commentEdit = {};
       this.editToggle = false;
@@ -47,7 +48,7 @@ export default {
         path: "tasks/" + this.commentProp.taskId + "/comments",
         resource: "comments",
         id: this.commentProp.id,
-        parentId: this.commentProp.taskId
+        parentId: this.commentProp.taskId,
       });
     },
   },

@@ -64,6 +64,7 @@ export default {
   methods: {
     editList() {
       this.$store.dispatch("edit", {
+        getPath: "boards/" + this.listProp.boardId + "/lists",
         path: "lists/" + this.listProp.id,
         data: this.listEdit,
         resource: "lists",
@@ -85,10 +86,10 @@ export default {
         path: "tasks",
         resource: "tasks",
         data: this.newTask,
-        parentId: this.listProp.id
-        }),
-        this.newTask = {}
-    }
+        parentId: this.listProp.id,
+      }),
+        (this.newTask = {});
+    },
   },
   components: {
     TaskComponent,

@@ -2,6 +2,15 @@
   <div class="task-component card">
     <button @click="editToggle = !editToggle">Edit</button>
     <button @click="deleteTask">Delete Task</button>
+    <select
+      v-model="newTaskList.listId"
+      @change="moveTask()"
+      class="custom-select"
+    >
+      <option :value="list.id" v-for="list in lists" :key="list.id">{{
+        list.title
+      }}</option>
+    </select>
     <form @submit.prevent="editTask" class="md-form" v-if="editToggle">
       <input
         v-model="taskEdit.title"
@@ -13,15 +22,15 @@
     </form>
     <p>{{ taskProp.title }}</p>
     <div class="card-body">
-    <form @submit.prevent="addComment" class="md-form">
-      <input
-        v-model="newComment.body"
-        type="text"
-        id="materialSaveFormName"
-        class="form-control"
-        placeholder="Enter Comment..."
-      />
-    </form>
+      <form @submit.prevent="addComment" class="md-form">
+        <input
+          v-model="newComment.body"
+          type="text"
+          id="materialSaveFormName"
+          class="form-control"
+          placeholder="Enter Comment..."
+        />
+      </form>
     </div>
     <div class="card-body">
       <comment-component
@@ -46,7 +55,9 @@ export default {
       newComment: {
         taskId: this.taskProp.id,
       },
+      newTaskList: {},
       editToggle: false,
+      moveToggle: false,
     };
   },
   mounted() {
@@ -57,17 +68,29 @@ export default {
     });
   },
   computed: {
+    lists() {
+      return this.$store.state.lists;
+    },
     comments() {
       return this.$store.state.comments[this.taskProp.id];
     },
   },
   methods: {
+    moveTask() {
+      this.$store.dispatch("moveTask", {
+        path: "tasks/" + this.taskProp.id,
+        data: this.newTaskList,
+        id: this.$route.params.id,
+        parentId: this.newTaskList.parentId.id,
+      });
+    },
     editTask() {
-      this.$store.dispatch("editTask", {
+      this.$store.dispatch("editDictionaries", {
+        getPath: "lists/" + this.taskProp.listId + "/tasks",
         path: "tasks/" + this.taskProp.id,
         resource: "tasks",
-        id: this.taskProp.listId,
         data: this.taskEdit,
+        parentId: this.taskProp.listId,
       });
       this.taskEdit = {};
       this.editToggle = false;
@@ -77,7 +100,6 @@ export default {
         deletePath: "tasks/" + this.taskProp.id,
         path: "lists/" + this.taskProp.listId + "/tasks",
         resource: "tasks",
-        id: this.taskProp.id,
         parentId: this.taskProp.listId,
       });
     },
@@ -87,11 +109,11 @@ export default {
         path: "comments",
         resource: "comments",
         data: this.newComment,
-        parentId: this.taskProp.id
-        }),
-        this.newComment = {}
-    }
-   },
+        parentId: this.taskProp.id,
+      }),
+        (this.newComment = {});
+    },
+  },
   components: {
     CommentComponent,
   },

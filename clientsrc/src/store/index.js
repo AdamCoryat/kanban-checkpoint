@@ -91,7 +91,6 @@ export default new Vuex.Store({
         console.error(error);
       }
     },
-
     async getResource({ commit }, payload) {
       try {
         let res = await api.get(payload.path);
@@ -111,15 +110,10 @@ export default new Vuex.Store({
         console.error(error);
       }
     },
-    async deleteDictionary({ commit, dispatch }, payload) {
+    async deleteDictionary({ dispatch }, payload) {
       try {
         await api.delete(payload.deletePath);
-        commit("deleteDictionary", {
-          resource: payload.resource,
-          id: payload.id,
-          parentId: payload.parentId,
-        });
-        dispatch("getComments", {
+        dispatch("getDictionaries", {
           resource: payload.resource,
           path: payload.path,
           parentId: payload.parentId,
@@ -146,7 +140,7 @@ export default new Vuex.Store({
           path: payload.getPath,
           resource: payload.resource,
           data: res.data,
-          parentId: payload.parentId
+          parentId: payload.parentId,
         });
       } catch (error) {
         console.error(error);
@@ -156,7 +150,7 @@ export default new Vuex.Store({
       try {
         let res = await api.put(payload.path, payload.data);
         dispatch("getResource", {
-          path: payload.resource + "/",
+          path: payload.getPath,
           resource: payload.resource,
         });
       } catch (error) {
@@ -177,19 +171,42 @@ export default new Vuex.Store({
         });
       } catch (error) {}
     },
-    async editTask({ commit, dispatch }, payload) {
+    async editDictionaries({ dispatch }, payload) {
       try {
         let res = await api.put(payload.path, payload.data);
-        commit("addDictionary", {
-          data: res.data,
+        dispatch("getDictionaries", {
+          path: payload.getPath,
+          parentId: payload.parentId,
           resource: payload.resource,
-          id: payload.id,
-        });
-        dispatch("getTasks", {
-          path: "lists/" + payload.id + "/tasks",
-          listId: payload.id,
         });
       } catch (error) {}
+    },
+    async moveTask({ dispatch }, payload) {
+      try {
+        await api.put(payload.path, payload.data);
+        dispatch("getLists", {
+          id: payload.id,
+          resource: "tasks",
+          parentId: payload,
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async getLists({ commit, dispatch }, payload) {
+      try {
+        debugger;
+        let res = await api.get("boards/" + payload.id + "/lists");
+        console.log(res);
+        commit("setResource", { data: res.data, resource: "lists" });
+        dispatch("getDictionaries", {
+          resource: "tasks",
+          path: "lists/" + payload.parentId + "/tasks",
+          parentId: payload.parentId,
+        });
+      } catch (error) {
+        console.error(error);
+      }
     },
   },
 });
