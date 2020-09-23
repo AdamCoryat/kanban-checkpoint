@@ -13,6 +13,17 @@
     </form>
     <p>{{ taskProp.title }}</p>
     <div class="card-body">
+    <form @submit.prevent="addComment" class="md-form">
+      <input
+        v-model="newComment.body"
+        type="text"
+        id="materialSaveFormName"
+        class="form-control"
+        placeholder="Enter Comment..."
+      />
+    </form>
+    </div>
+    <div class="card-body">
       <comment-component
         v-for="comment in comments"
         :key="comment.id"
@@ -32,6 +43,9 @@ export default {
   data() {
     return {
       taskEdit: {},
+      newComment: {
+        taskId: this.taskProp.id,
+      },
       editToggle: false,
     };
   },
@@ -67,7 +81,17 @@ export default {
         parentId: this.taskProp.listId,
       });
     },
-  },
+    addComment() {
+      this.$store.dispatch("createDictionary", {
+        getPath: "tasks/" + this.taskProp.id + "/comments",
+        path: "comments",
+        resource: "comments",
+        data: this.newComment,
+        parentId: this.taskProp.id
+        }),
+        this.newComment = {}
+    }
+   },
   components: {
     CommentComponent,
   },

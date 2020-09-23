@@ -55,6 +55,7 @@ export default {
   methods: {
     addBoard() {
       this.$store.dispatch("create", {
+        getPath: "boards/",
         path: "boards/",
         resource: "boards",
         data: this.newBoard,

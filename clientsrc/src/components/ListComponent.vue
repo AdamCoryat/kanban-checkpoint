@@ -15,6 +15,17 @@
         </form>
         <h3>{{ listProp.title }}</h3>
       </div>
+      <div class="card-body">
+        <form @submit.prevent="addTask" class="md-form">
+          <input
+            v-model="newTask.title"
+            type="text"
+            id="materialSaveFormName"
+            class="form-control"
+            placeholder="Task title..."
+          />
+        </form>
+      </div>
       <div class="card-body p-2">
         <task-component v-for="task in tasks" :key="task.id" :taskProp="task" />
       </div>
@@ -32,6 +43,9 @@ export default {
   data() {
     return {
       listEdit: {},
+      newTask: {
+        listId: this.listProp.id,
+      },
       editToggle: false,
     };
   },
@@ -62,9 +76,19 @@ export default {
         deletePath: "lists/" + this.listProp.id,
         id: this.listProp.id,
         resource: "lists",
-        path: "lists/",
+        path: "boards/" + this.listProp.boardId + "/lists",
       });
     },
+    addTask() {
+      this.$store.dispatch("createDictionary", {
+        getPath: "lists/" + this.listProp.id + "/tasks",
+        path: "tasks",
+        resource: "tasks",
+        data: this.newTask,
+        parentId: this.listProp.id
+        }),
+        this.newTask = {}
+    }
   },
   components: {
     TaskComponent,

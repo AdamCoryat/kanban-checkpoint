@@ -100,10 +100,9 @@ export default new Vuex.Store({
         console.error(error);
       }
     },
-    async deleteById({ commit, dispatch }, payload) {
+    async deleteById({ dispatch }, payload) {
       try {
         await api.delete(payload.deletePath);
-        commit("delete", { resource: payload.resource, id: payload.id });
         dispatch("getResource", {
           path: payload.path,
           resource: payload.resource,
@@ -129,14 +128,25 @@ export default new Vuex.Store({
         console.error(error);
       }
     },
-    async create({ commit, dispatch }, payload) {
+    async create({ dispatch }, payload) {
       try {
         let res = await api.post(payload.path, payload.data);
-        let resource = payload.path;
-        commit("setResource", { data: res.data, resource });
         dispatch("getResource", {
-          path: payload.path,
+          path: payload.getPath,
           resource: payload.resource,
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async createDictionary({ dispatch }, payload) {
+      try {
+        let res = await api.post(payload.path, payload.data);
+        dispatch("getDictionaries", {
+          path: payload.getPath,
+          resource: payload.resource,
+          data: res.data,
+          parentId: payload.parentId
         });
       } catch (error) {
         console.error(error);

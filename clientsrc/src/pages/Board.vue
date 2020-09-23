@@ -30,7 +30,7 @@ export default {
     return {
       newList: {
         title: "",
-        boardId: this.id,
+        boardId: this.$route.params.id,
       },
     };
   },
@@ -48,6 +48,7 @@ export default {
   methods: {
     createList() {
       this.$store.dispatch("create", {
+        getPath: "boards/" + this.$route.params.id + "/lists",
         path: "lists",
         resource: "lists",
         data: this.newList,
