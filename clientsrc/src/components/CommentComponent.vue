@@ -1,9 +1,20 @@
 <template>
   <div class="comment-component">
-    <div class="card">
-      <p>{{ commentProp.body }}</p>
-      <button @click="deleteComment">delete</button>
-      <button @click="editToggle = !editToggle">Edit</button>
+    <div class="card comment-border my-1 bg-warning">
+      <div class="text-right">
+        <i
+          @click="editToggle = !editToggle"
+          class="fa fa-paint-brush text-dark text-right pointer"
+          aria-hidden="true"
+        ></i>
+        <i
+          @click="deleteComment"
+          class="fa fa-times-circle-o text-danger text-right mx-1 pointer"
+          aria-hidden="true"
+        ></i>
+      </div>
+      <p class="mx-1 rounded bg-light p-2">{{ commentProp.body }}</p>
+
       <form @submit.prevent="editComment" class="md-form" v-if="editToggle">
         <input
           v-model="commentEdit.body"
@@ -56,4 +67,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.comment-border {
+  border: 1px solid rgb(179, 120, 52);
+}
+</style>

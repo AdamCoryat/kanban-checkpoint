@@ -3,17 +3,17 @@
     <div class="card bg-primary border-dark shadow m-1">
       <div class="card-header">
         <p class="d-flex justify-content-between p-1">
-        <i
-          @click="editToggle = !editToggle"
-          class="fa fa-paint-brush text-secondary text-left pointer"
-          aria-hidden="true"
-        ></i>
-        <i
-          @click="deleteList"
-          class="fa fa-times-circle-o text-danger text-right mx-1 pointer"
-          aria-hidden="true"
-        ></i>
-      </p>
+          <i
+            @click="editToggle = !editToggle"
+            class="fa fa-paint-brush text-secondary text-left pointer"
+            aria-hidden="true"
+          ></i>
+          <i
+            @click="deleteList"
+            class="fa fa-times-circle-o text-danger text-right mx-1 pointer"
+            aria-hidden="true"
+          ></i>
+        </p>
         <form @submit.prevent="editList" class="md-form" v-if="editToggle">
           <input
             v-model="listEdit.title"
@@ -24,24 +24,36 @@
           />
         </form>
         <h2 class="text-light text-center">{{ listProp.title }}</h2>
-        <i class="fa fa-bars text-dark" @click="listToggle = !listToggle" aria-hidden="true"></i>
+        <i
+          class="fa fa-bars text-dark pointer"
+          @click="listToggle = !listToggle"
+          aria-hidden="true"
+        ></i>
       </div>
       <div v-if="listToggle">
-      <div class="card-body" >
-        <i @click="taskToggle =  !taskToggle" class="fa fa-plus text-dark text-left" aria-hidden="true"></i>
-        <form @submit.prevent="addTask" class="md-form" v-if="taskToggle">
-          <input
-            v-model="newTask.title"
-            type="text"
-            id="materialSaveFormName"
-            class="form-control"
-            placeholder="Task title..."
+        <div class="card-body">
+          <i
+            @click="taskToggle = !taskToggle"
+            class="fa fa-plus text-dark text-left pointer"
+            aria-hidden="true"
+          ></i>
+          <form @submit.prevent="addTask" class="md-form" v-if="taskToggle">
+            <input
+              v-model="newTask.title"
+              type="text"
+              id="materialSaveFormName"
+              class="form-control"
+              placeholder="Task title..."
+            />
+          </form>
+        </div>
+        <div class="card-body p-2">
+          <task-component
+            v-for="task in tasks"
+            :key="task.id"
+            :taskProp="task"
           />
-        </form>
-      </div>
-      <div class="card-body p-2">
-        <task-component v-for="task in tasks" :key="task.id" :taskProp="task" />
-      </div>
+        </div>
       </div>
     </div>
   </div>
@@ -96,7 +108,7 @@ export default {
     },
     addTask() {
       this.newTask.listId = this.listProp.id;
-      this.newTask.boardId = this.$route.params.id
+      this.newTask.boardId = this.$route.params.id;
       this.$store.dispatch("createDictionary", {
         getPath: "lists/" + this.listProp.id + "/tasks",
         path: "tasks",

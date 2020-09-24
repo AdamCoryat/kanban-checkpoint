@@ -70,22 +70,24 @@ export default new Vuex.Store({
     },
     async create({ dispatch }, payload) {
       try {
-        let res = await api.post(payload.path, payload.data);
+        await api.post(payload.path, payload.data);
         dispatch("getResource", {
           path: payload.getPath,
           resource: payload.resource,
         });
+        ns.toast("Created!", 2000, "success");
       } catch (error) {
         console.error(error);
       }
     },
     async edit({ dispatch }, payload) {
       try {
-        let res = await api.put(payload.path, payload.data);
+        await api.put(payload.path, payload.data);
         dispatch("getResource", {
           path: payload.getPath,
           resource: payload.resource,
         });
+        ns.toast("Saved!", 2000, "success");
       } catch (error) {
         console.error(error);
       }
@@ -124,6 +126,7 @@ export default new Vuex.Store({
           data: res.data,
           parentId: payload.parentId,
         });
+        ns.toast("Created!", 2000, "success");
       } catch (error) {
         console.error(error);
       }
@@ -136,6 +139,7 @@ export default new Vuex.Store({
           parentId: payload.parentId,
           resource: payload.resource,
         });
+        ns.toast("Saved!", 2000, "success");
       } catch (error) {}
     },
     async deleteDictionary({ dispatch }, payload) {
@@ -166,6 +170,7 @@ export default new Vuex.Store({
           resource: "tasks",
           parentId: payload.oldParentId,
         });
+        ns.toast("Task Moved!", 2000, "success");
       } catch (error) {
         console.error(error);
       }
