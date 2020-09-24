@@ -24,8 +24,7 @@ List.pre("deleteMany", function (next) {
   //lets find all the lists and remove them
   Promise.all([
     //something like...
-    // @ts-ignore
-    dbContext.Task.deleteMany({ listId: this._conditions_id }),
+    dbContext.Task.deleteMany({ boardId: this._conditions._id }),
   ])
     .then(() => next())
     .catch((err) => next(err));
@@ -34,8 +33,7 @@ List.pre("deleteMany", function (next) {
 //CASCADE ON DELETE
 List.pre("findOneAndRemove", function (next) {
   //lets find all the lists and remove them
-  // @ts-ignore
-  Promise.all([dbContext.Task.deleteMany({ boardId: this._conditions._id })])
+  Promise.all([dbContext.Task.deleteMany({ listId: this._conditions._id })])
     .then(() => next())
     .catch((err) => next(err));
 });

@@ -172,7 +172,6 @@ export default new Vuex.Store({
     },
     async getLists({ commit, dispatch }, payload) {
       try {
-        // debugger;
         let res = await api.get("boards/" + payload.id + "/lists");
         console.log(res);
         commit("setResource", { data: res.data, resource: "lists" });

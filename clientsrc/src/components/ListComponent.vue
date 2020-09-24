@@ -80,6 +80,7 @@ export default {
     },
     addTask() {
       this.newTask.listId = this.listProp.id;
+      this.newTask.boardId = this.$route.params.id
       this.$store.dispatch("createDictionary", {
         getPath: "lists/" + this.listProp.id + "/tasks",
         path: "tasks",

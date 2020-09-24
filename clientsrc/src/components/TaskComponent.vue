@@ -104,6 +104,8 @@ export default {
     },
     addComment() {
       this.newComment.taskId = this.taskProp.id;
+      this.newComment.listId = this.taskProp.listId
+      this.newComment.boardId = this.$route.params.id
       this.$store.dispatch("createDictionary", {
         getPath: "tasks/" + this.taskProp.id + "/comments",
         path: "comments",

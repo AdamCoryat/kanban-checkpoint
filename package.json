@@ -21,6 +21,7 @@
     "helmet": "^3.21.2",
     "mongoose": "^5.8.0",
     "socket.io": "^2.3.0",
+    "sweetalert": "^2.1.2",
     "sweetalert2": "^10.3.3"
   },
   "engines": {
