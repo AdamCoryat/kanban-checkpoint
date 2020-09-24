@@ -9,11 +9,11 @@ export default class NotificationService {
         title: title,
         text: text,
         icon: "warning",
-        iconHtml: `<img
-          src="https://media4.giphy.com/media/QBd2kLB5qDmysEXre9/giphy.gif"
-          style="width: 200px"
-          alt
-        />`,
+        // iconHtml: `<img
+        //   src="https://media4.giphy.com/media/QBd2kLB5qDmysEXre9/giphy.gif"
+        //   style="width: 200px"
+        //   alt
+        // />`,
         showCancelButton: true,
         confirmButtonColor: "blue",
         cancelButtonColor: "orange",

@@ -1,11 +1,6 @@
 <template>
   <div class="board-component col-3">
-    <div class="card m-2">
-      <router-link :to="{ name: 'board', params: { id: boardProp.id } }">
-        <h1>{{ boardProp.title }}</h1>
-      </router-link>
-      <button @click="deleteBoard">Delete Board</button>
-      <button @click="editToggle = !editToggle">Edit</button>
+    <div class="card m-2 bg-primary">
       <form @submit.prevent="editBoard" class="md-form" v-if="editToggle">
         <input
           v-model="boardEdit.title"
@@ -23,6 +18,25 @@
         />
         <button type="submit">Save</button>
       </form>
+      <p class="d-flex justify-content-between p-1">
+        <i
+          @click="editToggle = !editToggle"
+          class="fa fa-paint-brush text-secondary text-left"
+          aria-hidden="true"
+        ></i>
+        <i
+          @click="deleteBoard"
+          class="fa fa-times-circle-o text-danger text-right mx-1"
+          aria-hidden="true"
+        ></i>
+      </p>
+      <router-link :to="{ name: 'board', params: { id: boardProp.id } }">
+        <h1 class="text-light">{{ boardProp.title }}</h1>
+      </router-link>
+
+      <div class="card-body bg-white border-primary text-dark">
+        <p>{{ boardProp.description }}</p>
+      </div>
     </div>
   </div>
 </template>
@@ -48,7 +62,7 @@ export default {
         data: this.boardEdit,
         resource: "boards",
       });
-      this.editBoard = {};
+      this.boardEdit = {};
       this.editToggle = false;
     },
     deleteBoard() {

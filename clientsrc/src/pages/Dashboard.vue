@@ -1,21 +1,25 @@
 <template>
   <div class="dashboards container-fluid">
-    <div class="row">
-      <div class="col-12">
-        <form @submit.prevent="addBoard">
-          <input
-            type="text"
-            placeholder="title"
-            v-model="newBoard.title"
-            required
-          />
-          <input
-            type="text"
-            placeholder="description"
-            v-model="newBoard.description"
-          />
-          <button type="submit">Create Board</button>
-        </form>
+    <div class="row justify-content-center">
+      <div class="col-4">
+        <div class="card card-body bg-primary border-dark shadow m-1">
+          <form @submit.prevent="addBoard" class="m-2">
+            <input
+              type="text"
+              placeholder="title"
+              v-model="newBoard.title"
+              required
+            />
+            <input
+              type="text"
+              placeholder="description"
+              v-model="newBoard.description"
+            />
+            <button class="btn btn-success border-dark" type="submit">
+              Create Board
+            </button>
+          </form>
+        </div>
       </div>
     </div>
     <div class="row d-flex flex-wrap justify-content-center">
