@@ -21,21 +21,21 @@
       <p class="d-flex justify-content-between p-1">
         <i
           @click="editToggle = !editToggle"
-          class="fa fa-paint-brush text-secondary text-left"
+          class="fa fa-paint-brush text-secondary text-left pointer"
           aria-hidden="true"
         ></i>
         <i
           @click="deleteBoard"
-          class="fa fa-times-circle-o text-danger text-right mx-1"
+          class="fa fa-times-circle-o text-danger text-right mx-1 pointer"
           aria-hidden="true"
         ></i>
       </p>
       <router-link :to="{ name: 'board', params: { id: boardProp.id } }">
-        <h1 class="text-light">{{ boardProp.title }}</h1>
+        <h1 class="text-light text-center">{{ boardProp.title }}</h1>
       </router-link>
 
       <div class="card-body bg-white border-primary text-dark">
-        <p>{{ boardProp.description }}</p>
+        <p class="text-center">{{ boardProp.description }}</p>
       </div>
     </div>
   </div>

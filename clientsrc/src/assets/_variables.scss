@@ -20,9 +20,10 @@ $yellow: yellow;
 $green: green;
 $teal: teal;
 $cyan: cyan;
-$white: white;
+$white: #ffffff;
 $gray: gray;
 $gray-dark: darkslategray;
+$offwhite: #e7d4b8;
 
 $colors: (
   "blue": $blue,
@@ -38,6 +39,7 @@ $colors: (
   "white": $white,
   "gray": $gray,
   "gray-dark": $gray-dark,
+  "off-white": $offwhite,
 ) !default;
 
 // .btn-primary {

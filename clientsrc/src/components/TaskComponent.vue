@@ -1,9 +1,27 @@
 <template>
-  <div class="task-component card">
-    <button @click="editToggle = !editToggle">Edit</button>
-    <button @click="deleteTask">Delete Task</button>
+  <div class="task-component card bg-task border-dark border rounded">
+    <div class="card-title bg-success">
+    <p class="d-flex justify-content-between p-1">
+        <i
+          @click="editToggle = !editToggle"
+          class="fa fa-paint-brush text-dark text-left pointer"
+          aria-hidden="true"
+        ></i>
+        <i
+          @click="deleteTask"
+          class="fa fa-times-circle-o text-danger text-right mx-1 pointer"
+          aria-hidden="true"
+        ></i>
+      </p>
+      <h4 class="text-center text-light">{{ taskProp.title }}</h4>
+      <p class="d-flex justify-content-between p-1">
+        <i @click="commentToggle =  !commentToggle" class="fa fa-plus text-dark text-left" aria-hidden="true"></i>
+        <i @click="moveToggle = !moveToggle" class="fa fa-arrows text-dark pointer m-1 text-right" aria-hidden="true"></i>
+      </p>
+      </div>
+      <div v-if="moveToggle">
     <select
-      v-model="newTaskList.listId"
+      v-model="newTaskList.listId "
       @change="moveTask()"
       class="custom-select"
     >
@@ -11,6 +29,8 @@
         list.title
       }}</option>
     </select>
+      </div>
+
     <form @submit.prevent="editTask" class="md-form" v-if="editToggle">
       <input
         v-model="taskEdit.title"
@@ -20,8 +40,7 @@
         placeholder="Task title..."
       />
     </form>
-    <p>{{ taskProp.title }}</p>
-    <div class="card-body">
+    <div class="card-body" v-if="commentToggle">
       <form @submit.prevent="addComment" class="md-form" id="comment-add">
         <input
           v-model="newComment.body"
@@ -63,6 +82,7 @@ export default {
       newTaskList: {},
       editToggle: false,
       moveToggle: false,
+      commentToggle: false,
     };
   },
   computed: {
@@ -122,4 +142,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.bg-task{
+  background-color: #e2e2e2;
+}
+</style>

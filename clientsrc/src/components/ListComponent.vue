@@ -1,9 +1,19 @@
 <template>
   <div class="list-component col-3">
-    <div class="card">
+    <div class="card bg-primary border-dark shadow m-1">
       <div class="card-header">
-        <button @click="deleteList">Delete</button>
-        <button @click="editToggle = !editToggle">Edit</button>
+        <p class="d-flex justify-content-between p-1">
+        <i
+          @click="editToggle = !editToggle"
+          class="fa fa-paint-brush text-secondary text-left pointer"
+          aria-hidden="true"
+        ></i>
+        <i
+          @click="deleteList"
+          class="fa fa-times-circle-o text-danger text-right mx-1 pointer"
+          aria-hidden="true"
+        ></i>
+      </p>
         <form @submit.prevent="editList" class="md-form" v-if="editToggle">
           <input
             v-model="listEdit.title"
@@ -13,10 +23,13 @@
             placeholder="List title..."
           />
         </form>
-        <h3>{{ listProp.title }}</h3>
+        <h2 class="text-light text-center">{{ listProp.title }}</h2>
+        <i class="fa fa-bars text-dark" @click="listToggle = !listToggle" aria-hidden="true"></i>
       </div>
-      <div class="card-body">
-        <form @submit.prevent="addTask" class="md-form">
+      <div v-if="listToggle">
+      <div class="card-body" >
+        <i @click="taskToggle =  !taskToggle" class="fa fa-plus text-dark text-left" aria-hidden="true"></i>
+        <form @submit.prevent="addTask" class="md-form" v-if="taskToggle">
           <input
             v-model="newTask.title"
             type="text"
@@ -28,6 +41,7 @@
       </div>
       <div class="card-body p-2">
         <task-component v-for="task in tasks" :key="task.id" :taskProp="task" />
+      </div>
       </div>
     </div>
   </div>
@@ -52,6 +66,8 @@ export default {
       listEdit: {},
       newTask: {},
       editToggle: false,
+      taskToggle: false,
+      listToggle: false,
     };
   },
   computed: {
