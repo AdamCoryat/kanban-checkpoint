@@ -1,8 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import router from "../router/index";
-import { api } from "./AxiosService";
-
+import { api } from "./AxiosService.js";
+import ns from "./NotificationService.js";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -15,11 +15,17 @@ export default new Vuex.Store({
     activeBoard: {},
   },
   mutations: {
+    // Auth0 Mutations
     setUser(state, user) {
       state.user = user;
     },
-    setBoards(state, boards) {
-      state.boards = boards;
+    // Array Mutations
+    setResource(state, payload) {
+      state[payload.resource] = payload.data;
+    },
+    // Dictionary Mutations
+    setDictionary(state, payload) {
+      Vue.set(state[payload.resource], payload.parentId, payload.data);
     },
     addResource(state, payload) {
       let resource = state[payload.resource];
@@ -31,35 +37,9 @@ export default new Vuex.Store({
         );
       }
     },
-    setResource(state, payload) {
-      state[payload.resource] = payload.data;
-    },
     addDictionary(state, payload) {
       let resource = state[payload.resource][payload.id];
       resource.push(payload.data);
-    },
-    delete(state, payload) {
-      let resource = state[payload.resource];
-      if (Array.isArray(resource)) {
-        resource = resource.filter((p) => p.id != payload.id);
-      } else {
-        console.error(
-          "Cannot remove from ${payload.resource} as it is not an array"
-        );
-      }
-    },
-    deleteDictionary(state, payload) {
-      let resource = state[payload.resource][payload.parentId];
-      if (Array.isArray(resource)) {
-        resource = resource.filter((p) => p.id != payload.id);
-      } else {
-        console.error(
-          "Cannot remove from ${payload.resource} as it is not an array"
-        );
-      }
-    },
-    setDictionary(state, payload) {
-      Vue.set(state[payload.resource], payload.parentId, payload.data);
     },
   },
 
@@ -79,45 +59,11 @@ export default new Vuex.Store({
         console.error(err);
       }
     },
-    async getDictionaries({ commit }, payload) {
-      try {
-        let res = await api.get(payload.path);
-        commit("setDictionary", {
-          resource: payload.resource,
-          data: res.data,
-          parentId: payload.parentId,
-        });
-      } catch (error) {
-        console.error(error);
-      }
-    },
+    // Array Actions
     async getResource({ commit }, payload) {
       try {
         let res = await api.get(payload.path);
         commit("setResource", { data: res.data, resource: payload.resource });
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    async deleteById({ dispatch }, payload) {
-      try {
-        await api.delete(payload.deletePath);
-        dispatch("getResource", {
-          path: payload.path,
-          resource: payload.resource,
-        });
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    async deleteDictionary({ dispatch }, payload) {
-      try {
-        await api.delete(payload.deletePath);
-        dispatch("getDictionaries", {
-          resource: payload.resource,
-          path: payload.path,
-          parentId: payload.parentId,
-        });
       } catch (error) {
         console.error(error);
       }
@@ -128,6 +74,42 @@ export default new Vuex.Store({
         dispatch("getResource", {
           path: payload.getPath,
           resource: payload.resource,
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async edit({ dispatch }, payload) {
+      try {
+        let res = await api.put(payload.path, payload.data);
+        dispatch("getResource", {
+          path: payload.getPath,
+          resource: payload.resource,
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async deleteById({ dispatch }, payload) {
+      try {
+        if (await ns.confirmAction()) await api.delete(payload.deletePath);
+        dispatch("getResource", {
+          path: payload.path,
+          resource: payload.resource,
+        });
+        ns.toast("Deleted!", 2000, "success");
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    // Dictionary Actions
+    async getDictionaries({ commit }, payload) {
+      try {
+        let res = await api.get(payload.path);
+        commit("setDictionary", {
+          resource: payload.resource,
+          data: res.data,
+          parentId: payload.parentId,
         });
       } catch (error) {
         console.error(error);
@@ -146,31 +128,6 @@ export default new Vuex.Store({
         console.error(error);
       }
     },
-    async edit({ dispatch }, payload) {
-      try {
-        let res = await api.put(payload.path, payload.data);
-        dispatch("getResource", {
-          path: payload.getPath,
-          resource: payload.resource,
-        });
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    async editComment({ commit, dispatch }, payload) {
-      try {
-        let res = await api.put(payload.path, payload.data);
-        commit("addDictionary", {
-          data: res.data,
-          resource: payload.resource,
-          id: payload.id,
-        });
-        dispatch("getComments", {
-          path: "tasks/" + payload.id + "/comments",
-          taskId: payload.id,
-        });
-      } catch (error) {}
-    },
     async editDictionaries({ dispatch }, payload) {
       try {
         let res = await api.put(payload.path, payload.data);
@@ -181,13 +138,33 @@ export default new Vuex.Store({
         });
       } catch (error) {}
     },
+    async deleteDictionary({ dispatch }, payload) {
+      try {
+        if (await ns.confirmAction("do you want to delete?"))
+          await api.delete(payload.deletePath);
+        dispatch("getDictionaries", {
+          resource: payload.resource,
+          path: payload.path,
+          parentId: payload.parentId,
+        });
+        ns.toast("Deleted!", 2000, "success");
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    // Edge Case Actions
     async moveTask({ dispatch }, payload) {
       try {
         await api.put(payload.path, payload.data);
         dispatch("getLists", {
           id: payload.id,
           resource: "tasks",
-          parentId: payload,
+          parentId: payload.parentId,
+        });
+        dispatch("getLists", {
+          id: payload.id,
+          resource: "tasks",
+          parentId: payload.oldParentId,
         });
       } catch (error) {
         console.error(error);
@@ -195,7 +172,7 @@ export default new Vuex.Store({
     },
     async getLists({ commit, dispatch }, payload) {
       try {
-        debugger;
+        // debugger;
         let res = await api.get("boards/" + payload.id + "/lists");
         console.log(res);
         commit("setResource", { data: res.data, resource: "lists" });

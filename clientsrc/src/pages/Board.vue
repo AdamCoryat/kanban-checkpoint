@@ -26,15 +26,6 @@ import ListComponent from "../components/ListComponent.vue";
 export default {
   name: "board",
   props: ["id"],
-  data() {
-    return {
-      newList: {
-        title: "",
-        boardId: this.$route.params.id,
-      },
-    };
-  },
-
   mounted() {
     this.$store.dispatch("getResource", {
       path: "boards/" + this.$route.params.id,
@@ -45,15 +36,10 @@ export default {
       resource: "lists",
     });
   },
-  methods: {
-    createList() {
-      this.$store.dispatch("create", {
-        getPath: "boards/" + this.$route.params.id + "/lists",
-        path: "lists",
-        resource: "lists",
-        data: this.newList,
-      });
-    },
+  data() {
+    return {
+      newList: {},
+    };
   },
   computed: {
     board() {
@@ -61,6 +47,18 @@ export default {
     },
     lists() {
       return this.$store.state.lists;
+    },
+  },
+  methods: {
+    createList() {
+      this.newList.boardId = this.$route.params.id;
+      this.$store.dispatch("create", {
+        getPath: "boards/" + this.$route.params.id + "/lists",
+        path: "lists",
+        resource: "lists",
+        data: this.newList,
+      });
+      this.newList = {};
     },
   },
   components: {

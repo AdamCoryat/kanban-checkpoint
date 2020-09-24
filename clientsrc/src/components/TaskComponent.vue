@@ -22,7 +22,7 @@
     </form>
     <p>{{ taskProp.title }}</p>
     <div class="card-body">
-      <form @submit.prevent="addComment" class="md-form">
+      <form @submit.prevent="addComment" class="md-form" id="comment-add">
         <input
           v-model="newComment.body"
           type="text"
@@ -49,23 +49,21 @@ export default {
   props: {
     taskProp: {},
   },
-  data() {
-    return {
-      taskEdit: {},
-      newComment: {
-        taskId: this.taskProp.id,
-      },
-      newTaskList: {},
-      editToggle: false,
-      moveToggle: false,
-    };
-  },
   mounted() {
     this.$store.dispatch("getDictionaries", {
       path: "tasks/" + this.taskProp.id + "/comments",
       resource: "comments",
       parentId: this.taskProp.id,
     });
+  },
+  data() {
+    return {
+      taskEdit: {},
+      newComment: {},
+      newTaskList: {},
+      editToggle: false,
+      moveToggle: false,
+    };
   },
   computed: {
     lists() {
@@ -81,7 +79,8 @@ export default {
         path: "tasks/" + this.taskProp.id,
         data: this.newTaskList,
         id: this.$route.params.id,
-        parentId: this.newTaskList.parentId.id,
+        parentId: this.newTaskList.listId,
+        oldParentId: this.taskProp.listId,
       });
     },
     editTask() {
@@ -104,14 +103,15 @@ export default {
       });
     },
     addComment() {
+      this.newComment.taskId = this.taskProp.id;
       this.$store.dispatch("createDictionary", {
         getPath: "tasks/" + this.taskProp.id + "/comments",
         path: "comments",
         resource: "comments",
         data: this.newComment,
         parentId: this.taskProp.id,
-      }),
-        (this.newComment = {});
+      });
+      this.newComment = {};
     },
   },
   components: {

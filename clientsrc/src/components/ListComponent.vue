@@ -40,21 +40,19 @@ export default {
   props: {
     listProp: {},
   },
-  data() {
-    return {
-      listEdit: {},
-      newTask: {
-        listId: this.listProp.id,
-      },
-      editToggle: false,
-    };
-  },
   mounted() {
     this.$store.dispatch("getDictionaries", {
       path: "lists/" + this.listProp.id + "/tasks",
       resource: "tasks",
       parentId: this.listProp.id,
     });
+  },
+  data() {
+    return {
+      listEdit: {},
+      newTask: {},
+      editToggle: false,
+    };
   },
   computed: {
     tasks() {
@@ -81,14 +79,15 @@ export default {
       });
     },
     addTask() {
+      this.newTask.listId = this.listProp.id;
       this.$store.dispatch("createDictionary", {
         getPath: "lists/" + this.listProp.id + "/tasks",
         path: "tasks",
         resource: "tasks",
         data: this.newTask,
         parentId: this.listProp.id,
-      }),
-        (this.newTask = {});
+      });
+      this.newTask = {};
     },
   },
   components: {

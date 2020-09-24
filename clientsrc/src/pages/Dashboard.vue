@@ -60,7 +60,7 @@ export default {
         resource: "boards",
         data: this.newBoard,
       });
-      this.newBoard = { title: "", description: "" };
+      this.newBoard = {};
     },
   },
   components: {
