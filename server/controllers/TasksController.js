@@ -2,7 +2,7 @@ import express from "express";
 import BaseController from "../utils/BaseController";
 import auth0provider from "@bcwdev/auth0provider";
 import { tasksService } from "../services/TasksService";
-import { commentsService } from "../services/commentsService";
+import { commentsService } from "../services/CommentsService";
 
 //PUBLIC
 export class TasksController extends BaseController {
